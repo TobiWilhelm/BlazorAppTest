@@ -96,6 +96,9 @@ jobs:
             .
 
           docker push "${DOCKER_TAG}"
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
 
       # Set up kustomize
       - name: 'Set up Kustomize'
