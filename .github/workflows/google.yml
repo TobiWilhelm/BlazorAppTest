@@ -96,8 +96,6 @@ jobs:
             .
 
           docker push "${DOCKER_TAG}"
-        with:
-          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
 
       # Set up kustomize
       - name: 'Set up Kustomize'
