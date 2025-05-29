@@ -106,12 +106,21 @@ jobs:
           docker push "${DOCKER_TAG}"
 
       # Set up kustomize
-      - name: 'Set up Kustomize'
-        run: |
-          curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.4.3/kustomize_v5.4.3_linux_amd64.tar.gz
-          file --mime-type ./kustomize
-          file --mime-encoding ./kustomize
-          chmod u+x ./kustomize
+      # - name: 'Set up Kustomize'
+      #   run: |
+      #     curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.4.3/kustomize_v5.4.3_linux_amd64.tar.gz
+      #     file --mime-type ./kustomize
+      #     file --mime-encoding ./kustomize
+      #     chmod u+x ./kustomize
+
+      - name: 'Set up Kustomize own way'
+        uses : multani/action-setup-kustomize@v1
+        with:
+          version: '5.4.3' # Specify the version of kustomize you want to use
+          architecture: 'amd64' # Specify the architecture (amd64, arm64, etc.)
+
+      - name: Check Kustomize version
+        run: kustomize version
 
       # Deploy the Docker image to the GKE cluster
       - name: 'Deploy to GKE'
@@ -119,7 +128,7 @@ jobs:
           # replacing the image name in the k8s template
           dpkg --print-architecture
           file --mime-type ./kustomize
-          chmod u+x ./kustomize
+          chmod u+x ./kustomize version
           ./kustomize version
           ./kustomize edit set image LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG=$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA
           ./kustomize build . | kubectl apply -f -
