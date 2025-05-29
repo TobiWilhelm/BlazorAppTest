@@ -114,11 +114,10 @@ jobs:
       #     chmod u+x ./kustomize
 
       - name: 'Set up Kustomize own way'
-        uses : multani/action-setup-kustomize@v1
+        uses : 'multani/action-setup-kustomize@v1'
         with:
           version: '5.4.3' # Specify the version of kustomize you want to use
-          architecture: 'amd64' # Specify the architecture (amd64, arm64, etc.)
-
+    
       - name: Check Kustomize version
         run: kustomize version
 
@@ -126,11 +125,8 @@ jobs:
       - name: 'Deploy to GKE'
         run: |-
           # replacing the image name in the k8s template
-          dpkg --print-architecture
-          file --mime-type ./kustomize
-          chmod u+x ./kustomize version
-          ./kustomize version
-          ./kustomize edit set image LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG=$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA
-          ./kustomize build . | kubectl apply -f -
+          kustomize version
+          kustomize edit set image LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG=$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA
+          kustomize build . | kubectl apply -f -
           kubectl rollout status deployment/$DEPLOYMENT_NAME
           kubectl get services -o wide
