@@ -119,6 +119,7 @@ jobs:
           # replacing the image name in the k8s template
           dpkg --print-architecture
           file --mime-type ./kustomize
+          chmod u+x ./kustomize
           ./kustomize version
           ./kustomize edit set image LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG=$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA
           ./kustomize build . | kubectl apply -f -
