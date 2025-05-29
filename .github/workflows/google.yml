@@ -121,12 +121,21 @@ jobs:
       - name: Check Kustomize version
         run: kustomize version
 
+      - name: Prepare kustomization
+        run: |
+          # Create if missing
+          if [ ! -f kustomization.yaml ]; then
+            echo "Creating kustomization.yaml"
+            kustomize create --autodetect --recursive
+          fi
+
+      - name: Update image
+        run: kustomize edit set image LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG=$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA
+
       # Deploy the Docker image to the GKE cluster
       - name: 'Deploy to GKE'
         run: |-
           # replacing the image name in the k8s template
-          kustomize version
-          kustomize edit set image LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG=$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA
           kustomize build . | kubectl apply -f -
           kubectl rollout status deployment/$DEPLOYMENT_NAME
           kubectl get services -o wide
