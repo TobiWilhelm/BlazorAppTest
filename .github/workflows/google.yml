@@ -34,7 +34,9 @@
 name: 'Build and Deploy to GKEv1'
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      'main' # Change this to the branch you want to trigger the workflow on
 
 env:
   PROJECT_ID: 'tobiproject-442513' # TODO: update to your Google Cloud project ID
