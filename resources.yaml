@@ -6,7 +6,7 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app: nginx
+    app: blazor-deployment
   ports:
   - port: 80
     targetPort: 80
@@ -18,7 +18,7 @@ metadata:
   labels:
     app: blazor-deployment
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: blazor-deployment
@@ -30,4 +30,8 @@ spec:
       containers:
       - name: my-blazor-image
         # image: us-central1-docker.pkg.dev/GOOGLE_PROJECT/demo/nginx:latest
-        image: europe-west3-docker.pkg.dev/PROJECT_ID/samples/my-blazor-image:latest"
+        image: europe-west3-docker.pkg.dev/PROJECT_ID/samples/my-blazor-image:MY_TAG
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
