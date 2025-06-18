@@ -91,7 +91,7 @@ jobs:
         
       - name: 'Test kubectl'
         run: |
-          kubectl version --short
+          kubectl version
           kubectl get nodes
           kubectl get pods --all-namespaces
 
