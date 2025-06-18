@@ -29,7 +29,6 @@ spec:
     spec:
       containers:
       - name: my-blazor-image
-        # image: us-central1-docker.pkg.dev/GOOGLE_PROJECT/demo/nginx:latest
         image: europe-west3-docker.pkg.dev/PROJECT_ID/samples/my-blazor-image:MY_TAG
         resources:
           requests:
